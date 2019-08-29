@@ -1,0 +1,314 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.4
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 28 Agu 2019 pada 02.35
+-- Versi server: 10.1.37-MariaDB
+-- Versi PHP: 7.3.1
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `simon_pasien`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `nama` varchar(30) NOT NULL,
+  `tgl_lahir` date NOT NULL,
+  `jk` enum('laki-laki','perempuan') NOT NULL,
+  `no_hp` varchar(12) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `alamat` text NOT NULL,
+  `role` enum('admin','dokter','perawat') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `username`, `password`, `nama`, `tgl_lahir`, `jk`, `no_hp`, `email`, `alamat`, `role`) VALUES
+(1, 'ricky', 'ricky', 'Ricky Rodesta', '1995-12-22', 'laki-laki', '080908090809', 'rodesta2212@gmail.com', 'Jogonalan Kidul', 'admin'),
+(2, 'aziz', 'aziz', 'Soim Aziz', '1995-02-16', 'laki-laki', '081254547878', 'aziz@gmail.com', 'jln. diponegoro', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `catatan-perawat`
+--
+
+CREATE TABLE `catatan-perawat` (
+  `id_catatan` int(11) NOT NULL,
+  `waktu` datetime NOT NULL,
+  `catatan_perawat` text NOT NULL,
+  `id_rekam_medis` int(11) NOT NULL,
+  `id_perawat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `catatan-perawat`
+--
+
+INSERT INTO `catatan-perawat` (`id_catatan`, `waktu`, `catatan_perawat`, `id_rekam_medis`, `id_perawat`) VALUES
+(1500000001, '2019-08-01 13:05:00', 'pasien merasa pusing', 1400000001, 1300000001),
+(1500000002, '2019-08-01 13:10:00', 'pasien muntah\"', 1400000001, 1300000001),
+(1500000003, '2019-08-02 13:35:00', 'bibir pecah - pecah', 1400000002, 1300000002),
+(1500000004, '2019-08-05 13:10:00', 'pasien merasa pusing', 1400000003, 1300000001),
+(1500000005, '2019-08-06 09:10:00', 'bibir pasien pecah - pecah', 1400000004, 1300000002),
+(1500000006, '2019-08-07 09:05:00', 'bibir pasien pecah - pecah', 1400000005, 1300000001),
+(1500000007, '2019-08-16 13:05:00', 'trombosit rendah 8500 mikroliter', 1400000006, 1300000001);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `dokter`
+--
+
+CREATE TABLE `dokter` (
+  `id_dokter` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `nama` varchar(30) NOT NULL,
+  `tgl_lahir` date NOT NULL,
+  `jk` enum('laki-laki','perempuan') NOT NULL,
+  `no_hp` varchar(12) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `alamat` text NOT NULL,
+  `role` enum('admin','dokter','perawat') NOT NULL,
+  `id_admin` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `dokter`
+--
+
+INSERT INTO `dokter` (`id_dokter`, `username`, `password`, `nama`, `tgl_lahir`, `jk`, `no_hp`, `email`, `alamat`, `role`, `id_admin`) VALUES
+(1200000001, 'anis', 'anis', 'Nisrina Mufidah', '1996-12-02', 'perempuan', '082254853548', 'anis@gmail.com', 'jln samarinda', 'dokter', 1),
+(1200000002, 'wawan', 'wawan', 'Hermawan Dwi', '1997-12-12', 'laki-laki', '081231231231', 'wawan@mail.com', 'Jombor', 'dokter', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `hasil-intruksi`
+--
+
+CREATE TABLE `hasil-intruksi` (
+  `id_hasil_intruksi` int(11) NOT NULL,
+  `waktu` datetime NOT NULL,
+  `hasil_intruksi` text NOT NULL,
+  `id_intruksi` int(11) NOT NULL,
+  `id_perawat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `hasil-intruksi`
+--
+
+INSERT INTO `hasil-intruksi` (`id_hasil_intruksi`, `waktu`, `hasil_intruksi`, `id_intruksi`, `id_perawat`) VALUES
+(1700000001, '2019-08-02 14:00:00', 'pasien membaik', 1600000004, 1300000001),
+(1700000002, '2019-08-02 14:05:00', 'bibir pasien sembuh', 1600000003, 1300000001),
+(1700000003, '2019-08-07 10:00:00', 'bibir pasien sembuh', 1600000009, 1300000001),
+(1700000004, '2019-08-06 10:00:00', 'bibir pasien sembuh', 1600000008, 1300000001),
+(1700000005, '2019-08-05 14:00:00', 'pusing pasien hilang', 1600000005, 1300000001);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `intruksi-dokter`
+--
+
+CREATE TABLE `intruksi-dokter` (
+  `id_intruksi` int(11) NOT NULL,
+  `waktu` datetime NOT NULL,
+  `intruksi_dokter` text NOT NULL,
+  `id_catatan` int(11) NOT NULL,
+  `id_dokter` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `intruksi-dokter`
+--
+
+INSERT INTO `intruksi-dokter` (`id_intruksi`, `waktu`, `intruksi_dokter`, `id_catatan`, `id_dokter`) VALUES
+(1600000001, '2019-08-01 13:10:00', 'diberikan obat pusing', 1500000001, 1200000001),
+(1600000002, '2019-08-01 13:15:00', 'diberikan obat mual', 1500000002, 1200000001),
+(1600000003, '2019-08-02 13:40:00', 'diberikan vitamin C', 1500000003, 1200000001),
+(1600000004, '2019-08-02 13:45:00', 'beri makan buah - buahan', 1500000003, 1200000001),
+(1600000005, '2019-08-05 13:30:00', 'diberikan obat pusing', 1500000004, 1200000001),
+(1600000006, '2019-08-05 13:40:00', 'diberikan makan buah - buahan', 1500000004, 1200000001),
+(1600000007, '2019-08-06 09:20:00', 'berikan vitamin C', 1500000005, 1200000001),
+(1600000008, '2019-08-06 09:25:00', 'beri makan buah', 1500000005, 1200000001),
+(1600000009, '2019-08-07 09:10:00', 'beri vitamin C', 1500000006, 1200000001);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `pasien`
+--
+
+CREATE TABLE `pasien` (
+  `id_pasien` int(11) NOT NULL,
+  `nama` varchar(30) NOT NULL,
+  `nik` int(16) NOT NULL,
+  `tgl_lahir` date NOT NULL,
+  `jk` enum('laki-laki','perempuan') NOT NULL,
+  `no_hp` varchar(12) NOT NULL,
+  `alamat` text NOT NULL,
+  `gol_darah` enum('A','B','AB','O') NOT NULL,
+  `kondisi` enum('beri intruksi','intruksi ditambahkan','intruksi dijalankan','perawatan','selesai') NOT NULL,
+  `id_admin` int(11) NOT NULL,
+  `id_dokter` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `pasien`
+--
+
+INSERT INTO `pasien` (`id_pasien`, `nama`, `nik`, `tgl_lahir`, `jk`, `no_hp`, `alamat`, `gol_darah`, `kondisi`, `id_admin`, `id_dokter`) VALUES
+(1100000001, 'Topan', 2147483647, '2000-12-12', 'laki-laki', '081231231232', 'Janti', 'A', 'intruksi ditambahkan', 1, 1200000001),
+(1100000002, 'Chessa Pandu', 2147483333, '1998-06-03', 'laki-laki', '081231231232', 'Jombor', 'O', 'beri intruksi', 2, 1200000001),
+(1100000003, 'Restu', 2147483611, '1999-12-15', 'laki-laki', '083213222266', 'Bantul', 'B', 'selesai', 2, 1200000001),
+(1100000004, 'Vanka', 1247483454, '2000-07-04', 'perempuan', '081231231288', 'Jetis', 'AB', 'intruksi dijalankan', 1, 1200000001),
+(1100000005, 'Wisnu Hendra', 2147483600, '1996-04-11', 'laki-laki', '083213213777', 'Srandakan', 'B', 'perawatan', 1, 1200000002),
+(1100000006, 'Zara', 2147483444, '1998-09-12', 'perempuan', '081231238794', 'Kasihan', 'AB', 'beri intruksi', 2, 1200000002);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `perawat`
+--
+
+CREATE TABLE `perawat` (
+  `id_perawat` int(11) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `nama` varchar(30) NOT NULL,
+  `tgl_lahir` date NOT NULL,
+  `jk` enum('laki-laki','perempuan') NOT NULL,
+  `no_hp` varchar(12) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `alamat` text NOT NULL,
+  `role` enum('admin','dokter','perawat') NOT NULL,
+  `id_admin` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `perawat`
+--
+
+INSERT INTO `perawat` (`id_perawat`, `username`, `password`, `nama`, `tgl_lahir`, `jk`, `no_hp`, `email`, `alamat`, `role`, `id_admin`) VALUES
+(1300000001, 'ayana', 'ayana', 'Ayana Sahab', '1999-08-12', 'perempuan', '081231231222', 'ayana@mail.com', 'Janti', 'perawat', 2),
+(1300000002, 'melody', 'melody', 'Melody Laksani', '1993-08-09', 'perempuan', '081231231233', 'melody@mail.com', 'Kasihan Bantul', 'perawat', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `rekam-medis`
+--
+
+CREATE TABLE `rekam-medis` (
+  `id_rekam_medis` int(11) NOT NULL,
+  `suhu` int(2) NOT NULL,
+  `tensi` varchar(9) NOT NULL,
+  `diagnosis_penyakit` text NOT NULL,
+  `waktu` datetime NOT NULL,
+  `id_pasien` int(11) NOT NULL,
+  `id_perawat` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `rekam-medis`
+--
+
+INSERT INTO `rekam-medis` (`id_rekam_medis`, `suhu`, `tensi`, `diagnosis_penyakit`, `waktu`, `id_pasien`, `id_perawat`) VALUES
+(1400000001, 40, '120/100', 'demam tinggi', '2019-08-01 13:00:00', 1100000001, 1300000001),
+(1400000002, 38, '130/100', 'dehidrasi berat', '2019-08-02 13:30:00', 1100000001, 1300000002),
+(1400000003, 40, '100/120', 'demam tinggi', '2019-08-05 13:00:00', 1100000004, 1300000001),
+(1400000004, 37, '100/120', 'demam tinggi', '2019-08-06 09:00:00', 1100000003, 1300000002),
+(1400000005, 41, '120/100', 'demam tinggi', '2019-08-07 09:00:00', 1100000002, 1300000001),
+(1400000006, 40, '120/100', 'demam berdarah', '2019-08-16 13:00:00', 1100000004, 1300000001);
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indeks untuk tabel `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
+
+--
+-- Indeks untuk tabel `catatan-perawat`
+--
+ALTER TABLE `catatan-perawat`
+  ADD PRIMARY KEY (`id_catatan`);
+
+--
+-- Indeks untuk tabel `dokter`
+--
+ALTER TABLE `dokter`
+  ADD PRIMARY KEY (`id_dokter`);
+
+--
+-- Indeks untuk tabel `hasil-intruksi`
+--
+ALTER TABLE `hasil-intruksi`
+  ADD PRIMARY KEY (`id_hasil_intruksi`);
+
+--
+-- Indeks untuk tabel `intruksi-dokter`
+--
+ALTER TABLE `intruksi-dokter`
+  ADD PRIMARY KEY (`id_intruksi`);
+
+--
+-- Indeks untuk tabel `pasien`
+--
+ALTER TABLE `pasien`
+  ADD PRIMARY KEY (`id_pasien`);
+
+--
+-- Indeks untuk tabel `perawat`
+--
+ALTER TABLE `perawat`
+  ADD PRIMARY KEY (`id_perawat`);
+
+--
+-- Indeks untuk tabel `rekam-medis`
+--
+ALTER TABLE `rekam-medis`
+  ADD PRIMARY KEY (`id_rekam_medis`);
+
+--
+-- AUTO_INCREMENT untuk tabel yang dibuang
+--
+
+--
+-- AUTO_INCREMENT untuk tabel `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
